@@ -15,7 +15,7 @@ from utils.audio_utils import extract_audio, generate_captions
 video_file_path = "../example_videos/example_samples/roger_clip.mp4"
 
 # Load the original video clip
-original_clip = VideoFileClip(video_file_path)
+original_video = VideoFileClip(video_file_path)
 
 # Create pipeline
 pipeline = VideoEditingPipeline()
@@ -23,14 +23,12 @@ pipeline = VideoEditingPipeline()
 # Add tasks
 pipeline.add_task(ClippingTask(RandomClipEditor(0, 30)))
 pipeline.add_task(FormattingTask(AspectRatioFormatter('9:16')))
+pipeline.add_task(CaptionAdderTask(CaptionAdder()))
 
-# Get intermediary video for caption generation
-clipped_video = pipeline.execute(original_clip)
-extract_audio(clipped_video, "output1.wav")
-caption_json = generate_captions("output1.wav")
-clipped_video = CaptionAdder(caption_json).add_captions(clipped_video)
+# Execute pipeline on video
+final_clipped_video = pipeline.execute(original_video)
 
 output_filename = "output_vid1.mp4"
-clipped_video.write_videofile(output_filename, codec="libx264", fps=24)
+final_clipped_video.write_videofile(output_filename, codec="libx264", fps=24)
 
 
