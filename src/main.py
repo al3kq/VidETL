@@ -13,9 +13,9 @@ from editors.captioning.caption_adder import CaptionAdder
 pipeline = VideoEditingPipeline()
 
 # Add tasks
-pipeline.add_task(ClippingTask(RandomClipEditor(0, 30)))
-pipeline.add_task(FormattingTask(AspectRatioFormatter('9:16')))
-pipeline.add_task(CaptionAdderTask(CaptionAdder()))
+pipeline.add_task(RandomClipEditor(0, 30))
+pipeline.add_task(AspectRatioFormatter('9:16'))
+pipeline.add_task(CaptionAdder())
 
 directory = "../example_videos/example_samples"
 for filename in os.listdir(directory):

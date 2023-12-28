@@ -6,7 +6,7 @@ class BaseClipEditor:
         # common to all clip editing tasks, if any.
         pass
 
-    def edit(self, video_clip):
+    def apply(self, video_clip):
         """
         This method should be implemented by subclasses to apply specific editing
         operations to the provided video clip.

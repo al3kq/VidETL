@@ -7,7 +7,7 @@ class RandomClipEditor(BaseClipEditor):
         self.start_time = start_time
         self.duration = duration
 
-    def edit(self, video_clip):
+    def apply(self, video_clip):
         """
         Extracts a random clip from the video.
         """

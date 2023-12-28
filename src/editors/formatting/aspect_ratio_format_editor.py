@@ -12,7 +12,7 @@ class AspectRatioFormatter(BaseFormatEditor):
         width, height = aspect_ratio.split(':')
         return float(width) / float(height)
 
-    def apply_format(self, video_clip):
+    def apply(self, video_clip):
         """
         Reformats a video clip to the specified aspect ratio.
 

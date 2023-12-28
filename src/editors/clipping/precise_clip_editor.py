@@ -6,7 +6,7 @@ class PreciseClipEditor(BaseClipEditor):
         self.start_time = start_time
         self.end_time = end_time
 
-    def edit(self, video_clip):
+    def apply(self, video_clip):
         """
         Extracts a specific clip from the video based on start and end times.
         """

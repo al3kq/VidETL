@@ -1,4 +1,6 @@
 from moviepy.editor import TextClip, CompositeVideoClip
+import time, os
+from utils.audio_utils import extract_audio, generate_captions
 
 class CaptionAdder:
     def __init__(self, caption_font='Arial', caption_fontsize=24, caption_color='white'):
@@ -6,8 +8,19 @@ class CaptionAdder:
         self.caption_fontsize = caption_fontsize
         self.caption_color = caption_color
 
-    def add_captions(self, video_clip, caption_json):
+    def get_caption_json(self, video_clip):
+        unique_id = int(time.time()) 
+        audio_filename = f"output_{unique_id}.wav"
+        # Assuming the add_captions method applies captions to the clip and returns the modified clip
+        extract_audio(video_clip, audio_filename)
+        caption_json = generate_captions(audio_filename)
+        if os.path.exists(audio_filename):
+            os.remove(audio_filename)
+        return caption_json
+
+    def apply(self, video_clip):
         clips = [video_clip]  # Start with the original clip
+        caption_json = self.get_caption_json(video_clip)
 
         for segment in caption_json['segments']:
             for word_info in segment['words']:
