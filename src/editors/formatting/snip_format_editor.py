@@ -1,4 +1,4 @@
-from base_format_editor import BaseFormatEditor
+from .base_format_editor import BaseFormatEditor
 
 class CropFormatEditor(BaseFormatEditor):
     def __init__(self, video_clip, crop_area):

@@ -1,4 +1,4 @@
-from base_clip_editor import BaseClipEditor
+from .base_clip_editor import BaseClipEditor
 
 class PreciseClipEditor(BaseClipEditor):
     def __init__(self, start_time, end_time):

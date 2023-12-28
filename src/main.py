@@ -22,18 +22,15 @@ pipeline = VideoEditingPipeline()
 
 # Add tasks
 pipeline.add_task(ClippingTask(RandomClipEditor(0, 30)))
-pipeline.add_task(FormattingTask(AspectRatioFormatter('8:9')))
+pipeline.add_task(FormattingTask(AspectRatioFormatter('9:16')))
+
 # Get intermediary video for caption generation
-clipped_video = pipeline.execute()
-extract_audio(clipped_video, "output.wav")
-caption_json = generate_captions("output.wav")
+clipped_video = pipeline.execute(original_clip)
+extract_audio(clipped_video, "output1.wav")
+caption_json = generate_captions("output1.wav")
+clipped_video = CaptionAdder(caption_json).add_captions(clipped_video)
 
-pipeline = VideoEditingPipeline()
-pipeline.add_task(CaptionAdderTask(CaptionAdder(), caption_json))
-
-# Execute pipeline
-final_clip = pipeline.execute(clipped_video)
-output_filename = "output_vid.mp4"
-final_clip.write_videofile(output_filename, codec="libx264", fps=24)
+output_filename = "output_vid1.mp4"
+clipped_video.write_videofile(output_filename, codec="libx264", fps=24)
 
 

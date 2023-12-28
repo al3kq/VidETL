@@ -1,5 +1,5 @@
 import random
-from base_clip_editor import BaseClipEditor
+from .base_clip_editor import BaseClipEditor
 
 class RandomClipEditor(BaseClipEditor):
     def __init__(self,  start_time, duration):

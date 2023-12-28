@@ -1,15 +1,14 @@
 from moviepy.editor import TextClip, CompositeVideoClip
 
 class CaptionAdder:
-    def __init__(self, video_clip, json_captions, caption_font='Arial', caption_fontsize=24, caption_color='white'):
-        self.video_clip = video_clip
+    def __init__(self, json_captions, caption_font='Arial', caption_fontsize=24, caption_color='white'):
         self.json_captions = json_captions
         self.caption_font = caption_font
         self.caption_fontsize = caption_fontsize
         self.caption_color = caption_color
 
-    def add_captions(self):
-        clips = [self.video_clip]  # Start with the original clip
+    def add_captions(self, video_clip):
+        clips = [video_clip]  # Start with the original clip
 
         for segment in self.json_captions['segments']:
             for word_info in segment['words']:

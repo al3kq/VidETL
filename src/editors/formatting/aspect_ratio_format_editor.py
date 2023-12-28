@@ -1,4 +1,4 @@
-from base_format_editor import BaseFormatEditor
+from .base_format_editor import BaseFormatEditor
 
 class AspectRatioFormatter(BaseFormatEditor):
     def __init__(self, target_aspect_ratio):
