@@ -2,20 +2,18 @@ import random
 from base_clip_editor import BaseClipEditor
 
 class RandomClipEditor(BaseClipEditor):
-    def __init__(self, video_path, start_time, duration):
-        super().__init__(video_path)
+    def __init__(self,  start_time, duration):
+        super().__init__()
         self.start_time = start_time
         self.duration = duration
 
-    def edit(self):
+    def edit(self, video_clip):
         """
         Extracts a random clip from the video.
         """
-        # Load the video file
-        self.load_video()
 
         # Calculate the latest possible start time for the clip
-        max_clip_start_time = self.video.duration - self.duration
+        max_clip_start_time = video_clip.duration - self.duration
 
         # Ensure start_time is not later than max_clip_start_time
         if self.start_time > max_clip_start_time:
@@ -25,6 +23,6 @@ class RandomClipEditor(BaseClipEditor):
         random_start_time = random.uniform(self.start_time, max_clip_start_time)
 
         # Extract the subclip
-        clip = self.video.subclip(random_start_time, random_start_time + self.duration)
+        clip = video_clip.subclip(random_start_time, random_start_time + self.duration)
 
         return clip
