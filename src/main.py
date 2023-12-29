@@ -2,9 +2,6 @@ from moviepy.editor import VideoFileClip
 import time, os
 
 from pipeline.video_pipeline import VideoEditingPipeline
-from pipeline.tasks.clipping_task import ClippingTask
-from pipeline.tasks.caption_adder_task import CaptionAdderTask
-from pipeline.tasks.formatting_task import FormattingTask
 from editors.clipping.random_clip_editor import RandomClipEditor
 from editors.formatting.aspect_ratio_format_editor import AspectRatioFormatter
 from editors.captioning.caption_adder import CaptionAdder
