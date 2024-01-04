@@ -3,7 +3,6 @@ from .base_clip_editor import BaseClipEditor
 
 class RandomClipEditor(BaseClipEditor):
     def __init__(self,  start_time, duration):
-        super().__init__()
         self.start_time = start_time
         self.duration = duration
 

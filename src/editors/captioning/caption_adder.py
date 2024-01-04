@@ -3,7 +3,7 @@ import time, os
 from utils.audio_utils import extract_audio, generate_captions
 
 class CaptionAdder:
-    def __init__(self, caption_font='Arial', caption_fontsize=24, caption_color='white'):
+    def __init__(self, caption_font='Arial', caption_fontsize=36, caption_color='white'):
         self.caption_font = caption_font
         self.caption_fontsize = caption_fontsize
         self.caption_color = caption_color
@@ -24,7 +24,7 @@ class CaptionAdder:
 
         for segment in caption_json['segments']:
             for word_info in segment['words']:
-                if word_info["confidence"] > 0.5:
+                if word_info["confidence"] > 0.2:
                     word = word_info['text']
                     start_time = word_info['start']
                     end_time = word_info['end']
