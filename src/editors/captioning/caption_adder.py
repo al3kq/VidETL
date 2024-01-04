@@ -24,20 +24,21 @@ class CaptionAdder:
 
         for segment in caption_json['segments']:
             for word_info in segment['words']:
-                word = word_info['text']
-                start_time = word_info['start']
-                end_time = word_info['end']
+                if word_info["confidence"] > 0.5:
+                    word = word_info['text']
+                    start_time = word_info['start']
+                    end_time = word_info['end']
 
-                # Create a TextClip for each word
-                txt_clip = TextClip(word, fontsize=self.caption_fontsize, font=self.caption_font, color=self.caption_color)
-                txt_clip = txt_clip.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
+                    # Create a TextClip for each word
+                    txt_clip = TextClip(word, fontsize=self.caption_fontsize, font=self.caption_font, color=self.caption_color)
+                    txt_clip = txt_clip.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
 
-                outline_txt = TextClip(word, fontsize=self.caption_fontsize+2, font=self.caption_font, color="black")
-                outline_txt_clip = outline_txt.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
+                    outline_txt = TextClip(word, fontsize=self.caption_fontsize+2, font=self.caption_font, color="black")
+                    outline_txt_clip = outline_txt.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
 
-                # Add the text clip to the list of clips
-                clips.append(outline_txt_clip)
-                clips.append(txt_clip)
+                    # Add the text clip to the list of clips
+                    clips.append(outline_txt_clip)
+                    clips.append(txt_clip)
 
         # Composite all clips (original and text clips) together
         video_with_captions = CompositeVideoClip(clips)
