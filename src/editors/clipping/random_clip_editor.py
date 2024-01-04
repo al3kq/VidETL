@@ -2,15 +2,17 @@ import random
 from .base_clip_editor import BaseClipEditor
 
 class RandomClipEditor(BaseClipEditor):
-    def __init__(self,  start_time, duration):
+    def __init__(self,  start_time, duration, silent = False):
         self.start_time = start_time
         self.duration = duration
+        self.silent = silent
 
     def apply(self, video_clip):
         """
         Extracts a random clip from the video.
         """
-
+        if self.silent:
+            video_clip = video_clip.without_audio()
         # Calculate the latest possible start time for the clip
         max_clip_start_time = video_clip.duration - self.duration
 

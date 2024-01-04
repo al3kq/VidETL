@@ -1,5 +1,5 @@
-from moviepy.editor import clips_array, vfx
 import random
+from moviepy.editor import clips_array, vfx
 
 def combine_clips_top_bottom(clip1, clip2):
     """

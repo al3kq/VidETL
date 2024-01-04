@@ -21,7 +21,7 @@ top_clips = execute_pipeline_from_dir(directory, pipeline)
 
 # Seperate pipeline for bottom clips
 bottom_pipeline = VideoEditingPipeline()
-bottom_pipeline.add_task(RandomClipEditor(0, 30))
+bottom_pipeline.add_task(RandomClipEditor(0, 30, silent=True))
 bottom_pipeline.add_task(AspectRatioFormatter('8:9'))
 
 bottom_dir = "../example_videos/bottom"
