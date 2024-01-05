@@ -6,3 +6,4 @@ video_env/
 output/
 example_videos/
 .vscode/
+.DS_Store
