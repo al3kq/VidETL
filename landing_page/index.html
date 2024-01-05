@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Your Product Landing Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .video,
+        .description,
+        .signup-form {
+            background: #fff;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .video iframe {
+            width: 100%;
+            max-width: 560px;
+            height: 315px;
+        }
+
+        .description h2,
+        .signup-form h2 {
+            color: #333;
+        }
+
+        .signup-form input[type=email] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .signup-form input[type=submit] {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .signup-form input[type=submit]:hover {
+            background-color: #4cae4c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to Our Product Page</h1>
+    </header>
+
+    <div class="container">
+        <!-- Video Section -->
+        <div class="video">
+            <h2>Our Product Video</h2>
+            <iframe src="https://www.youtube.com/embed/YourVideoID" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <!-- Product Description Section -->
+        <div class="description">
+            <h2>About Our Future Product</h2>
+            <p>Here you can write about your product...</p>
+        </div>
+
+        <!-- Email Sign-up Form Section -->
+        <div class="signup-form">
+            <h2>Stay Updated!</h2>
+            <p>Sign up to receive the latest news about our product:</p>
+            <form id="emailForm">
+                <input type="email" id="email" name="email" placeholder="Your email address" required>
+                <input type="submit" value="Subscribe">
+            </form>
+            <p id="formResponse"></p>
+        </div>
+    </div>
+
+    <!-- JavaScript for Form Submission -->
+    <script>
+        document.getElementById("emailForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            var formData = new FormData(e.target);
+            var object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            var json = JSON.stringify(object);
+
+            fetch('YOUR_WEB_APP_URL', {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json
+            }).then(function (response) {
+                document.getElementById("formResponse").innerText = "Thank you for subscribing!";
+            });
+        });
+    </script>
+</body>
+
+</html>

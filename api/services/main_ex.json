@@ -1,0 +1,47 @@
+{
+    "pipelines": [
+      {
+        "name": "Top Clips Pipeline",
+        "directory": "../example_videos/example_samples",
+        "tasks": [
+          {
+            "type": "RandomClipEditor",
+            "start": 0,
+            "end": 30,
+            "silent": false
+          },
+          {
+            "type": "AspectRatioFormatter",
+            "aspectRatio": "8:9"
+          },
+          {
+            "type": "CaptionAdder"
+          }
+        ]
+      },
+      {
+        "name": "Bottom Clips Pipeline",
+        "directory": "../example_videos/bottom",
+        "tasks": [
+          {
+            "type": "RandomClipEditor",
+            "start": 0,
+            "end": 30,
+            "silent": true
+          },
+          {
+            "type": "AspectRatioFormatter",
+            "aspectRatio": "8:9"
+          }
+        ]
+      }
+    ],
+    "postProcessing": {
+      "matchAndCombineClips": {
+        "topClips": "Top Clips Pipeline",
+        "bottomClips": "Bottom Clips Pipeline"
+      },
+      "saveDirectory": "../output"
+    }
+  }
+  
