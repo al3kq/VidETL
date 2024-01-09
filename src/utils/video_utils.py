@@ -1,5 +1,5 @@
 import random
-from moviepy.editor import clips_array, vfx
+from moviepy.editor import clips_array, vfx, VideoFileClip
 
 def combine_clips_top_bottom(clip1, clip2):
     """
@@ -36,3 +36,12 @@ def match_and_combine_clips(top_clips, bottom_clips):
 
     return combined_clips
 
+def convert_mp4_to_gif(input_file, output_file):
+    """
+    Convert an MP4 file to GIF format.
+
+    :param input_file: Path to the input MP4 file.
+    :param output_file: Path where the output GIF should be saved.
+    """
+    clip = VideoFileClip(input_file)
+    clip.write_gif(output_file, program='ffmpeg', fps=12)

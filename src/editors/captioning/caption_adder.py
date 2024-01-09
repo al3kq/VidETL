@@ -21,6 +21,16 @@ class CaptionAdder:
     def apply(self, video_clip):
         clips = [video_clip]  # Start with the original clip
         caption_json = self.get_caption_json(video_clip)
+        video_width, video_height = video_clip.size
+
+        # Reference dimensions (e.g., 640x720)
+        ref_width, ref_height = 640, 720
+
+        # Calculate the scaling factor based on width (or height)
+        scale_factor = video_width / ref_width
+
+        # Adjust font size based on the scaling factor
+        adjusted_fontsize = int(self.caption_fontsize * scale_factor)
 
         for segment in caption_json['segments']:
             for word_info in segment['words']:
@@ -29,15 +39,11 @@ class CaptionAdder:
                     start_time = word_info['start']
                     end_time = word_info['end']
 
-                    # Create a TextClip for each word
-                    txt_clip = TextClip(word, fontsize=self.caption_fontsize, font=self.caption_font, color=self.caption_color, stroke_color='black', stroke_width=2)
+                    # Create a TextClip for each word with adjusted fontsize
+                    txt_clip = TextClip(word, fontsize=adjusted_fontsize, font=self.caption_font, color=self.caption_color, size=(video_width*1/2, None), bg_color='black', method='caption')
                     txt_clip = txt_clip.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
 
-                    # outline_txt = TextClip(word, fontsize=self.caption_fontsize+2, font=self.caption_font, color="black")
-                    # outline_txt_clip = outline_txt.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
-
                     # Add the text clip to the list of clips
-                    # clips.append(outline_txt_clip)
                     clips.append(txt_clip)
 
         # Composite all clips (original and text clips) together
