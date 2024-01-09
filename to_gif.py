@@ -1,5 +1,5 @@
 import os
-from .src.utils.video_utils import convert_mp4_to_gif
+from src.utils.video_utils import convert_mp4_to_gif
 
 def convert_directory_mp4s_to_gifs(directory):
     """
