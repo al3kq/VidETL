@@ -8,4 +8,5 @@ Editing tasks added:
 * Combine multiple video clips (top/bottom)
 * Overlay seperate audio file to clip
 
-test
+* The ability to create video editing pipelines with JSON.
+* Potential for API
