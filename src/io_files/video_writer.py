@@ -7,7 +7,8 @@
 import time
 def save_video_files(clips, out_dir):
     for filename, clip in clips.items():
+        print(filename)
         unique_id = int(time.time())
         output_filename = f"{out_dir}/{filename}_{unique_id}.mp4"
-        clip.set_duration(4)
+        print(type(clip))
         clip.write_videofile(output_filename, bitrate='8000k', preset='slower', codec="h264_videotoolbox", fps=24)
