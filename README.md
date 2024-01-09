@@ -8,5 +8,9 @@ Editing tasks added:
 * Combine multiple video clips (top/bottom)
 * Overlay seperate audio file to clip
 
+Introduced openAI gtp3.5 to timestamped captions. Easy summary.
+
+Access:
+
 * The ability to create video editing pipelines with JSON.
 * Potential for API
