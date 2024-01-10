@@ -12,7 +12,7 @@ from io_files.video_writer import save_video_files
 pipeline = VideoEditingPipeline()
 
 # Add tasks
-pipeline.add_task(RandomClipEditor(0, 5))
+pipeline.add_task(RandomClipEditor(0, 20))
 pipeline.add_task(AspectRatioFormatter('8:9'))
 pipeline.add_task(CaptionAdder())
 
@@ -21,7 +21,7 @@ top_clips = execute_pipeline_from_dir(directory, pipeline)
 
 # Seperate pipeline for bottom clips
 bottom_pipeline = VideoEditingPipeline()
-bottom_pipeline.add_task(RandomClipEditor(0, 5, silent=True))
+bottom_pipeline.add_task(RandomClipEditor(0, 20, silent=True))
 bottom_pipeline.add_task(AspectRatioFormatter('8:9'))
 
 bottom_dir = "../example_videos/bottom"

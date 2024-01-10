@@ -34,17 +34,20 @@ class CaptionAdder:
 
         for segment in caption_json['segments']:
             for word_info in segment['words']:
-                if word_info["confidence"] > 0.2:
-                    word = word_info['text']
-                    start_time = word_info['start']
-                    end_time = word_info['end']
+                word = word_info['text']
+                if word_info["confidence"] < 0.2:
+                    word = "null"
+                    print(word_info["confidence"])
 
-                    # Create a TextClip for each word with adjusted fontsize
-                    txt_clip = TextClip(word, fontsize=adjusted_fontsize, font=self.caption_font, color=self.caption_color, size=(video_width*1/2, None), bg_color='black', method='caption')
-                    txt_clip = txt_clip.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
+                start_time = word_info['start']
+                end_time = word_info['end']
 
-                    # Add the text clip to the list of clips
-                    clips.append(txt_clip)
+                # Create a TextClip for each word with adjusted fontsize
+                txt_clip = TextClip(word, fontsize=adjusted_fontsize, font=self.caption_font, color=self.caption_color, size=(video_width*1/2, None), bg_color='black', method='caption')
+                txt_clip = txt_clip.set_pos('bottom').set_start(start_time).set_duration(end_time - start_time)
+
+                # Add the text clip to the list of clips
+                clips.append(txt_clip)
 
         # Composite all clips (original and text clips) together
         video_with_captions = CompositeVideoClip(clips)

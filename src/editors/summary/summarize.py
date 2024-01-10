@@ -14,13 +14,12 @@ class Summarizer:
     def apply(self, video_clip):
         api_key=os.environ.get("OPENAI_API_KEY")
         audio = video_clip.audio
-        print(api_key)
         self.client = OpenAI(api_key=api_key)
         captions = self.get_caption_json(video_clip)
 
         # Example usage
         text_summary = self.summarize_text(captions['text'])
-        prompt = f"Find segments related to '{text_summary}'"
+        prompt = f"Return segments related to '{text_summary}'"
         prompt = prompt + "\n" + self.get_segments(captions)
 
         response = self.client.chat.completions.create(
@@ -37,7 +36,9 @@ class Summarizer:
         print("======================================================")
         segments = self.find_matching_segments(key_phrase, captions)
         for seg in segments:
-            print(seg[0], end=" ")
+            for word in seg:
+                print(word[0], end=" ")
+            print("\n")
         video_clip = video_clip.set_audio(audio)
         return video_clip
 
@@ -65,7 +66,7 @@ class Summarizer:
             response_format={ "type": "json_object" },
             messages=[
                 {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
-                {"role": "user", "content": f"Summarize the following text into main ideas:\n\n{text}"}
+                {"role": "user", "content": f"In the following text select specific important segments to summarize the whole video:\n\n{text}"}
             ]
         )
         return response.choices[0].message.content
@@ -73,10 +74,13 @@ class Summarizer:
     def find_matching_segments(self, key_phrase, json_data):
         matching_segments = []
         for segment in json_data['segments']:
+            seg = []
             segment_text = segment['text'].lower()
             if fuzz.partial_ratio(key_phrase.lower(), segment_text) > 70:  # Adjust the threshold as needed
                 for word in segment['words']:
-                    matching_segments.append((word['text'], word['start'], word['end']))
+                    seg.append((word['text'], word['start'], word['end']))
+            if seg:
+                matching_segments.append(seg)
         return matching_segments
 
 
