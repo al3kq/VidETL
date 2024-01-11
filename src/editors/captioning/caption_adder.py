@@ -1,7 +1,7 @@
 from moviepy.editor import TextClip, CompositeVideoClip, ImageClip
 import time, os
 from utils.audio_utils import extract_audio, generate_captions
-from .new_captions import generate_highlighted_caption_image, generate_caption_image
+from utils.caption_utils import generate_highlighted_caption_image, generate_caption_image
 import subprocess
 
 class CaptionAdder:
