@@ -1,9 +1,23 @@
-from .base_format_editor import BaseFormatEditor
+from pydantic import validator
+from ..base_editor import BaseEditor
 
-class AspectRatioFormatter(BaseFormatEditor):
-    def __init__(self, aspect_ratio):
-        self.aspect_ratio = self._parse_aspect_ratio(aspect_ratio)
+class AspectRatioFormatter(BaseEditor):
+    aspect_ratio: str
 
+    # @validator('aspect_ratio')
+    # def validate_aspect_ratio(cls, v):
+    #     try:
+    #         width, height = map(float, v.split(':'))
+    #         if width <= 0 or height <= 0:
+    #             raise ValueError("Width and height must be positive numbers.")
+    #         return v
+    #     except ValueError:
+    #         raise ValueError("Aspect ratio must be in 'width:height' format and contain valid numbers.")
+
+    # def parsed_aspect_ratio(self):
+    #     width, height = map(float, self.aspect_ratio.split(':'))
+    #     return width / height
+    
     def _parse_aspect_ratio(self, aspect_ratio):
         """
         Parses the aspect ratio string and returns a numerical ratio.
@@ -11,36 +25,6 @@ class AspectRatioFormatter(BaseFormatEditor):
         """
         width, height = aspect_ratio.split(':')
         return float(width) / float(height)
-    
-    # def apply(self, video_clip):
-    #     original_width, original_height = video_clip.size
-    #     target_aspect_ratio = self.aspect_ratio
-
-    #     # Calculate the scale factors
-    #     scale_w = target_aspect_ratio * original_height / original_width
-    #     scale_h = original_width / (target_aspect_ratio * original_height)
-
-    #     # Determine the new dimensions
-    #     if scale_w >= 1:
-    #         # Need to add letterbox to the sides
-    #         new_height = original_height
-    #         new_width = int(original_height * target_aspect_ratio)
-    #     else:
-    #         # Need to add letterbox to the top and bottom
-    #         new_width = original_width
-    #         new_height = int(original_width / target_aspect_ratio)
-
-    #     # Resize the clip and add black bars to maintain aspect ratio
-    #     resized_clip = video_clip.resize(newsize=(new_width, new_height))
-    #     final_clip = resized_clip.margin(
-    #         left=(new_width - original_width) // 2 if scale_w >= 1 else 0,
-    #         top=(new_height - original_height) // 2 if scale_w < 1 else 0,
-    #         color=(0, 0, 0)
-    #     )
-
-    #     return final_clip
-
-
 
     def apply(self, video_clip):
         """
@@ -48,16 +32,17 @@ class AspectRatioFormatter(BaseFormatEditor):
 
         :return: moviepy.editor.VideoFileClip, the reformatted video clip
         """
+        aspect_ratio = self._parse_aspect_ratio(self.aspect_ratio)
         original_width, original_height = video_clip.size
 
         # Calculate the target dimensions based on the desired aspect ratio
-        target_width = original_height * self.aspect_ratio
+        target_width = original_height * aspect_ratio
 
         if target_width <= original_width:
             crop_x_start = (original_width - target_width) / 2
             cropped_clip = video_clip.crop(x1=crop_x_start, y1=0, width=target_width, height=original_height)
         else:
-            target_height = original_width / self.aspect_ratio
+            target_height = original_width / aspect_ratio
             crop_y_start = (original_height - target_height) / 2
             cropped_clip = video_clip.crop(x1=0, y1=crop_y_start, width=original_width, height=target_height)
 

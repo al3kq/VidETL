@@ -11,8 +11,8 @@ from io_files.video_writer import save_video_files
 pipeline = VideoEditingPipeline()
 
 # Add tasks
-pipeline.add_task(RandomClipEditor(0, 15))
-pipeline.add_task(AspectRatioFormatter('4:9'))
+pipeline.add_task(RandomClipEditor(start_time=0.0, duration=15.0))
+pipeline.add_task(AspectRatioFormatter(aspect_ratio='4:9'))
 pipeline.add_task(CaptionAdder())
 
 directory = "../example_videos/example_samples"

@@ -1,6 +1,9 @@
-class VideoEditingPipeline:
-    def __init__(self):
-        self.tasks = []
+from pydantic import BaseModel
+from typing import List
+from editors.base_editor import BaseEditor
+
+class VideoEditingPipeline(BaseModel):
+    tasks: List[BaseEditor] = []
 
     def add_task(self, task):
         self.tasks.append(task)

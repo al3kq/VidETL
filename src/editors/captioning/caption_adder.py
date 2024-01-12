@@ -1,15 +1,14 @@
-from moviepy.editor import TextClip, CompositeVideoClip, ImageClip
+from moviepy.editor import CompositeVideoClip, ImageClip
 import time, os
 from utils.audio_utils import extract_audio, generate_captions
 from utils.caption_utils import generate_highlighted_caption_image, generate_caption_image
-import subprocess
+from ..base_editor import BaseEditor
 
-class CaptionAdder:
-    def __init__(self, caption_font='Verdana', caption_fontsize=50, caption_color='white', highlighted_words=False):
-        self.caption_font = caption_font
-        self.caption_fontsize = caption_fontsize
-        self.caption_color = caption_color
-        self.highlighted_words = highlighted_words
+class CaptionAdder(BaseEditor):
+    caption_font: str = 'Verdana'
+    caption_fontsize: int = 50
+    caption_color: str = 'white'
+    highlighted_words: bool = False
 
     def get_caption_json(self, video_clip):
         unique_id = int(time.time()) 

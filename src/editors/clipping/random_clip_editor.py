@@ -1,11 +1,10 @@
 import random
-from .base_clip_editor import BaseClipEditor
+from ..base_editor import BaseEditor
 
-class RandomClipEditor(BaseClipEditor):
-    def __init__(self,  start_time, duration, silent = False):
-        self.start_time = start_time
-        self.duration = duration
-        self.silent = silent
+class RandomClipEditor(BaseEditor):
+    start_time: float
+    duration: float
+    silent: bool = False
 
     def apply(self, video_clip):
         """
