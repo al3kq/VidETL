@@ -30,6 +30,6 @@ import whisper_timestamped as whisper
 
 def generate_captions(audio_file_path): 
     audio = whisper.load_audio(audio_file_path)
-    model = whisper.load_model("tiny", device="cpu")
+    model = whisper.load_model("medium.en", device="cpu")
     result = whisper.transcribe(model, audio, language="en")
     return result

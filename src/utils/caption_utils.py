@@ -1,8 +1,12 @@
 from PIL import Image, ImageDraw, ImageFont
 
-def generate_highlighted_caption_image(text, highlighted_word, temp_output, font_path="/System/Library/Fonts/Arial.ttf", font_size=50):
-    # Load the font
-    font = ImageFont.truetype(font_path, font_size)
+def generate_highlighted_caption_image(text, highlighted_word, temp_output, font_path="/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf", font_size=36):
+    try:
+        # Load the font
+        font = ImageFont.truetype(font_path, font_size)
+    except IOError:
+        print("Font not found, using default font")
+        font = ImageFont.load_default()
 
     # Create an initial image to calculate text size
     dummy_img = Image.new('RGBA', (800, 600), (255, 255, 255, 0))
@@ -24,20 +28,25 @@ def generate_highlighted_caption_image(text, highlighted_word, temp_output, font
     img = Image.new('RGBA', (total_width, max_height), (255, 255, 255, 0))
     draw = ImageDraw.Draw(img)
 
-    # Draw each word
     x = 0  # Horizontal position
-    for i, word in enumerate(words):
-        if word == highlighted_word:
-            # Draw highlighted word with a shadow
-            draw.text((x + 2, 2), word, font=font, fill=(0, 0, 0, 128))  # Shadow
-            draw.text((x, 0), word, font=font, fill=(255, 0, 0, 255))  # Highlighted word in red
-        else:
-            # Draw regular word with a shadow
-            draw.text((x + 2, 2), word, font=font, fill=(0, 0, 0, 128))  # Shadow
-            draw.text((x, 0), word, font=font, fill=(255, 255, 255, 255))  # Regular word in white
+    for word in words:
+        shadow_offset = (4, 4)
+        shadow_color = (0, 0, 0, 128)  # Darker shadow for better contrast
 
-        # Update the x position for the next word
-        x += word_sizes[i][0] + 10  # 10 is spacing between words
+        if word.lower() == highlighted_word.lower():
+            text_color = (255, 213, 128, 255)  # Highlighted word color
+        else:
+            text_color = (255, 255, 255, 255)  # Regular text color (white)
+
+        # Draw shadow
+        draw.text((x + shadow_offset[0], shadow_offset[1]), word, font=font, fill=shadow_color)
+
+        # Draw text with outline (stroke)
+        stroke_width = 2
+        stroke_fill = (0, 0, 0)  # Black stroke
+        draw.text((x, 0), word, font=font, fill=text_color, stroke_width=stroke_width, stroke_fill=stroke_fill)
+
+        x += draw.textsize(word, font=font)[0] + 10
 
     # Save the image
     img.save(temp_output, format="PNG")
