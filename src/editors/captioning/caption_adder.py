@@ -5,10 +5,11 @@ from utils.caption_utils import generate_highlighted_caption_image, generate_cap
 import subprocess
 
 class CaptionAdder:
-    def __init__(self, caption_font='Verdana', caption_fontsize=36, caption_color='white'):
+    def __init__(self, caption_font='Verdana', caption_fontsize=50, caption_color='white', highlighted_words=False):
         self.caption_font = caption_font
         self.caption_fontsize = caption_fontsize
         self.caption_color = caption_color
+        self.highlighted_words = highlighted_words
 
     def get_caption_json(self, video_clip):
         unique_id = int(time.time()) 
@@ -44,21 +45,20 @@ class CaptionAdder:
                 # Constructing caption from words in the chunk
                 caption = ' '.join(word['text'] for word in chunk)
 
-                offset_from_bottom = 50
 
-                for word_info in chunk:
+                for word_index, word_info in enumerate(chunk):
                     word_start, word_end = word_info['start'], word_info['end']
 
                     temp_dir = "temp"
                     unique_id = int(time.time())
                     temp_file = f"{temp_dir}/test_{unique_id}.png"
 
-                    generate_highlighted_caption_image(caption, word_info["text"], temp_file)
+                    generate_highlighted_caption_image(caption, word_info["text"], word_index, temp_file, font_size=adjusted_fontsize)
 
 
                     image_clip = ImageClip(temp_file)
                     image_x_position = (video_width - image_clip.size[0])/2
-                    offset_from_bottom = 50
+                    offset_from_bottom = 25
                     image_y_position = video_height - image_clip.size[1] - offset_from_bottom
 
 
@@ -70,6 +70,6 @@ class CaptionAdder:
 
         # Composite all clips (original and text clips) together
         video_with_captions = CompositeVideoClip(clips)
-        subprocess.call(['sh', 'cltemp.sh'])
+        # subprocess.call(['sh', 'cltemp.sh'])
 
         return video_with_captions

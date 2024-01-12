@@ -44,4 +44,5 @@ def convert_mp4_to_gif(input_file, output_file):
     :param output_file: Path where the output GIF should be saved.
     """
     clip = VideoFileClip(input_file)
+    clip = clip.set_duration(clip.duration - 1)
     clip.write_gif(output_file, program='ffmpeg', fps=12)
