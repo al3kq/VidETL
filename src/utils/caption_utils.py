@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
-def generate_highlighted_caption_image(text, highlighted_word, highlighted_word_index, temp_output, font_path="/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf", font_size=36):
+def generate_highlighted_caption_image(text, highlighted_word, highlighted_word_index, temp_output,
+                                       text_padding=10, font_path="/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf", font_size=36):
     try:
         # Load the font
         font = ImageFont.truetype(font_path, font_size)
@@ -25,7 +26,6 @@ def generate_highlighted_caption_image(text, highlighted_word, highlighted_word_
         max_height = max(max_height, word_size[1])
 
     # Add additional padding for descenders and ascenders
-    text_padding = 10
     max_height += 2 * text_padding  # Add padding to top and bottom
 
     # Create a new image with the calculated text size
