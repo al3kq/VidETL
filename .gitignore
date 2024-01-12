@@ -7,3 +7,4 @@ output/
 example_videos/
 .vscode/
 .DS_Store
+__pycache__
