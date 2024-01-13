@@ -1,0 +1,21 @@
+{
+  "pipeline": {
+    "name": "test",
+    "tasks": [
+      {
+        "type": "RandomClipEditor",
+        "start_time": 0.0,
+        "duration": 15.0
+      },
+      {
+        "type": "AspectRatioFormatter",
+        "aspect_ratio": "4:9"
+      },
+      {
+        "type": "CaptionAdder"
+      }
+    ],
+    "directory": "../example_videos/example_samples"
+  },
+  "output_directory": "../output"
+}

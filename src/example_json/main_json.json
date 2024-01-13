@@ -1,0 +1,40 @@
+{
+    "pipelines": [
+      {
+        "name": "top",
+        "tasks": [
+          {
+            "type": "RandomClipEditor",
+            "start": 0,
+            "end": 10
+          },
+          {
+            "type": "AspectRatioFormatter",
+            "aspect_ratio": "8:9"
+          },
+          {
+            "type": "CaptionAdder"
+          }
+        ],
+        "directory": "../example_videos/example_samples"
+      },
+      {
+        "name": "bottom",
+        "tasks": [
+          {
+            "type": "RandomClipEditor",
+            "start": 0,
+            "end": 10,
+            "silent": true
+          },
+          {
+            "type": "AspectRatioFormatter",
+            "aspect_ratio": "8:9"
+          }
+        ],
+        "directory": "../example_videos/bottom"
+      }
+    ],
+    "output_directory": "../output"
+  }
+  
