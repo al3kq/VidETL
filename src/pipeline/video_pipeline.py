@@ -4,6 +4,7 @@ from editors.base_editor import BaseEditor
 
 class VideoEditingPipeline(BaseModel):
     tasks: List[BaseEditor] = []
+    name: str
 
     def add_task(self, task):
         self.tasks.append(task)
