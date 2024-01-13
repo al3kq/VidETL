@@ -9,7 +9,7 @@ from io_files.video_writer import save_video_files
 
 
 # Create pipeline
-pipeline = VideoEditingPipeline()
+pipeline = VideoEditingPipeline(name="top")
 
 # Add tasks
 pipeline.add_task(RandomClipEditor(0, 10))
@@ -20,7 +20,7 @@ directory = "../example_videos/example_samples"
 top_clips = execute_pipeline_from_dir(directory, pipeline)
 
 # Seperate pipeline for bottom clips
-bottom_pipeline = VideoEditingPipeline()
+bottom_pipeline = VideoEditingPipeline(name="bottom")
 bottom_pipeline.add_task(RandomClipEditor(0, 10, silent=True))
 bottom_pipeline.add_task(AspectRatioFormatter('8:9'))
 

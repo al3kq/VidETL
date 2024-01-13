@@ -8,7 +8,7 @@ from io_files.video_writer import save_video_files
 
 
 # Create pipeline
-pipeline = VideoEditingPipeline()
+pipeline = VideoEditingPipeline(name="test")
 
 # Add tasks
 pipeline.add_task(RandomClipEditor(start_time=0.0, duration=15.0))
