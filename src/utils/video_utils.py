@@ -16,6 +16,22 @@ def combine_clips_top_bottom(clip1, clip2):
 
     return combined_clip
 
+def combine_clips_left_right(clip1, clip2):
+    """
+    Combines two video clips into one, placing one on top of the other.
+    :param clip1: moviepy.editor.VideoFileClip, the first video clip
+    :param clip2: moviepy.editor.VideoFileClip, the second video clip
+    :return: moviepy.editor.VideoFileClip, the combined video clip
+    """
+    # Ensure both clips are of the same width for a uniform look
+    clip1 = clip1.fx(vfx.resize, width=clip2.size[0])
+
+    # Combine the clips in a vertical array (one on top of the other)
+    combined_clip = clips_array([[clip1, clip2]])
+
+    return combined_clip
+
+
 import random
 
 def match_and_combine_clips(top_clips, bottom_clips):
