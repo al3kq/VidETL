@@ -11,7 +11,7 @@ from src.io_files.video_writer import save_video_files
 def create_editor(editor_data):
     editor_type = editor_data['type']
     if editor_type == 'RandomClipEditor':
-        return RandomClipEditor(start_time=editor_data.get('start', 0), duration=editor_data.get('end', 30), silent=editor_data.get('silent', False))
+        return RandomClipEditor(start_time=int(editor_data.get('start', 0)), duration=int(editor_data.get('end', 30)), silent=editor_data.get('silent', False))
     elif editor_type == 'AspectRatioFormatter':
         return AspectRatioFormatter(aspect_ratio=editor_data['aspect_ratio'])
     elif editor_type == 'CaptionAdder':

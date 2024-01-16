@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customizable JSON Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Customizable JSON Generator</h1>
+        <form id="jsonForm">
+            <div class="form-section">
+                <label for="pipelineName">Pipeline Name:</label>
+                <input type="text" id="pipelineName" name="pipelineName">
+            </div>
+            <div class="form-section">
+                <label for="directory">Directory:</label>
+                <input type="text" id="directory" name="directory">
+            </div>
+            <h2>Tasks</h2>
+            <div id="tasks"></div>
+            <button type="button" id="addTaskBtn">Add Task</button>
+            <button type="submit">Generate JSON</button>
+        </form>
+        <pre id="outputJSON"></pre>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
