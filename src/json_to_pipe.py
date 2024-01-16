@@ -18,7 +18,10 @@ def create_editor(editor_data):
     elif editor_type == 'AspectRatioFormatter':
         return AspectRatioFormatter(aspect_ratio=editor_data['aspect_ratio'])
     elif editor_type == 'CaptionAdder':
-        return CaptionAdder()
+        return CaptionAdder(
+            highlight_words=editor_data.get('highlight_words', False),
+            editable=editor_data.get('editable', False)
+        )
     else:
         raise ValueError(f"Unknown editor type: {editor_type}")
 

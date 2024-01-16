@@ -12,7 +12,9 @@
         "aspect_ratio": "4:9"
       },
       {
-        "type": "CaptionAdder"
+        "type": "CaptionAdder",
+        "editable": true,
+        "highlight_words": true
       }
     ],
     "directory": "../example_videos/example_samples"

@@ -22,6 +22,15 @@ class CaptionAdder(BaseEditor):
             os.remove(audio_filename)
         return caption_json
     
+    def get_caption_file(self, video_clip, output_file):
+        unique_id = int(time.time()) 
+        audio_filename = f"output_{unique_id}.wav"
+        # Assuming the add_captions method applies captions to the clip and returns the modified clip
+        extract_audio(video_clip, audio_filename)
+        generate_captions_file(audio_filename, output_file)
+        if os.path.exists(audio_filename):
+            os.remove(audio_filename)
+    
     def get_editable_caption_json(self, video_clip):
         unique_id = int(time.time()) 
         caption_output_file = f"output_captions_{unique_id}.json"
