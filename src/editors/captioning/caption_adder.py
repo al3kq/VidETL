@@ -1,7 +1,7 @@
 from moviepy.editor import CompositeVideoClip, ImageClip
 import time
-from editors.captioning.utils.write_captions import get_caption_json, get_editable_caption_json
-from editors.captioning.utils.gen_captions import generate_highlighted_caption_image,generate_caption_image
+from .utils.write_captions import get_caption_json, get_editable_caption_json
+from .utils.gen_captions import generate_highlighted_caption_image,generate_caption_image
 from ..base_editor import BaseEditor
 from utils.file_utils import gen_temp_file_name
 

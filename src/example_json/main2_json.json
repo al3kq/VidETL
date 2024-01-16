@@ -17,7 +17,7 @@
         "highlight_words": true
       }
     ],
-    "directory": "../example_videos/example_samples"
+    "directory": "example_videos/example_samples"
   },
-  "output_directory": "../output"
+  "output_directory": "output"
 }
