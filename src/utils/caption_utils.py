@@ -82,3 +82,15 @@ def generate_caption_image(text, temp_output, font_path="/System/Library/Fonts/A
 
     # Save the image
     img.save(temp_output, format="PNG") 
+
+
+def get_low_confidence_words(caption_data, conf_thres):
+    low_conf = ""
+    for segments in caption_data["segments"]:
+        for word_data in segments["words"]:
+            if word_data["confidence"] < conf_thres:
+                word = word_data["text"]
+                conf = word_data["confidence"]
+                low_conf += f" {word}->{conf}"
+
+    return low_conf
