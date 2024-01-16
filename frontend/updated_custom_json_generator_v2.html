@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management UI</title>
+    <link rel="stylesheet" href="updated_style_v2.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Management UI</h1>
+        <form id="jsonForm">
+            <div class="form-section">
+                <label for="pipelineName">Pipeline Name:</label>
+                <input type="text" id="pipelineName" name="pipelineName">
+            </div>
+            <div class="form-section">
+                <label for="directory">Directory:</label>
+                <input type="text" id="directory" name="directory">
+            </div>
+            <div class="tasks-section">
+                <h2>Tasks</h2>
+                <div id="tasks"></div>
+                <button type="button" id="addTaskBtn">Add New Task</button>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <pre id="outputJSON"></pre>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,9 +1,98 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('jsonForm');
-    const addTaskBtn = document.getElementById('addTaskBtn');
     const tasksContainer = document.getElementById('tasks');
     const outputJSON = document.getElementById('outputJSON');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+
+    addTaskBtn.addEventListener('click', function () {
+        addTaskSelector();
+    });
+
+    tasksContainer.addEventListener('click', function (e) {
+        if (e.target.classList.contains('saveTaskBtn')) {
+            saveTask(e.target.parentElement);
+        } else if (e.target.classList.contains('editTaskBtn')) {
+            editTask(e.target.parentElement);
+        } else if (e.target.classList.contains('removeTaskBtn')) {
+            e.target.parentElement.remove();
+        }
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const json = generateJSON();
+        outputJSON.textContent = JSON.stringify(json, null, 2);
+    });
+
+    function addTaskSelector() {
+        const taskSelectorDiv = document.createElement('div');
+        taskSelectorDiv.classList.add('task');
+        taskSelectorDiv.innerHTML = `
+            <label>Task Type:</label>
+            <select class="taskTypeSelector">
+                <option value="">Select Task Type</option>
+                <option value="RandomClipEditor">RandomClipEditor</option>
+                <option value="AspectRatioFormatter">AspectRatioFormatter</option>
+                <option value="CaptionAdder">CaptionAdder</option>
+            </select>
+            <div class="taskConfig"></div>
+            <button type="button" class="saveTaskBtn">Save Task</button>
+        `;
+        tasksContainer.appendChild(taskSelectorDiv);
+    }
+
+    function saveTask(taskDiv) {
+        const taskTypeSelector = taskDiv.querySelector('.taskTypeSelector');
+        const taskType = taskTypeSelector.value;
+        taskTypeSelector.disabled = true;
+
+        // Display task type
+        const taskTypeDisplay = document.createElement('span');
+        taskTypeDisplay.textContent = `Task Type: ${taskType}`;
+        taskDiv.appendChild(taskTypeDisplay);
+
+        // Iterate through each configuration input to display their values
+        const taskConfigDisplay = document.createElement('div');
+        taskDiv.querySelectorAll('.taskConfig input').forEach(input => {
+            input.disabled = true;
+
+            let configValue = input.type === 'checkbox' ? input.checked : input.value;
+            let configText = `${input.name}: ${configValue}`;
+
+            let configDisplay = document.createElement('span');
+            configDisplay.textContent = configText;
+            taskConfigDisplay.appendChild(configDisplay);
+            taskConfigDisplay.appendChild(document.createElement('br')); // Line break for readability
+        });
+
+        taskDiv.appendChild(taskConfigDisplay);
+
+        taskDiv.querySelector('.saveTaskBtn').style.display = 'none';
+
+        taskDiv.innerHTML += `
+            <button type="button" class="editTaskBtn">Edit</button>
+            <button type="button" class="removeTaskBtn">Delete</button>
+        `;
+    }
+
+
+    function editTask(taskDiv) {
+        taskDiv.querySelector('.taskTypeSelector').disabled = false;
+        taskDiv.querySelectorAll('.taskConfig input').forEach(input => {
+            input.disabled = false;
+        });
+        taskDiv.querySelector('.editTaskBtn').style.display = 'none';
+        taskDiv.querySelector('.removeTaskBtn').style.display = 'none';
+        taskDiv.querySelector('.saveTaskBtn').style.display = 'inline-block';
+    }
+
+    tasksContainer.addEventListener('change', function (e) {
+        if (e.target.classList.contains('taskTypeSelector')) {
+            const taskType = e.target.value;
+            const taskConfigDiv = e.target.nextElementSibling;
+            taskConfigDiv.innerHTML = createTaskInputs(taskType);
+        }
+    });
 
     function createTaskInputs(taskType) {
         switch (taskType) {
@@ -31,37 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    addTaskBtn.addEventListener('click', function () {
-        const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task');
-        taskDiv.innerHTML = `
-            <label>Task Type:</label>
-            <select name="taskType" class="taskType">
-                <option value="">Select Task</option>
-                <option value="RandomClipEditor">RandomClipEditor</option>
-                <option value="AspectRatioFormatter">AspectRatioFormatter</option>
-                <option value="CaptionAdder">CaptionAdder</option>
-            </select>
-            <div class="taskConfig"></div>
-            <button type="button" class="removeTaskBtn">Remove Task</button>
-        `;
-        tasksContainer.appendChild(taskDiv);
-    });
-
-    tasksContainer.addEventListener('change', function (e) {
-        if (e.target.classList.contains('taskType')) {
-            const taskType = e.target.value;
-            const taskConfigDiv = e.target.nextElementSibling;
-            taskConfigDiv.innerHTML = createTaskInputs(taskType);
-        }
-    });
-
-    tasksContainer.addEventListener('click', function (e) {
-        if (e.target.className === 'removeTaskBtn') {
-            e.target.parentElement.remove();
-        }
-    });
-
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(form);
@@ -74,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             output_directory: "output"
         };
         document.querySelectorAll('.task').forEach(taskDiv => {
-            const taskType = taskDiv.querySelector('.taskType').value;
+            const taskType = taskDiv.querySelector('.taskTypeSelector').value;
             const taskConfig = {};
             taskDiv.querySelectorAll('.taskConfig input').forEach(input => {
                 if (input.type === 'checkbox') {

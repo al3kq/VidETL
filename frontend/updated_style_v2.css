@@ -18,7 +18,7 @@ h1, h2 {
     color: #333;
 }
 
-.form-section, .tasks-section {
+.form-section {
     margin-bottom: 20px;
 }
 
@@ -55,15 +55,10 @@ button:hover {
     border: 1px solid #ddd;
     padding: 10px;
     margin-bottom: 10px;
-    position: relative;
 }
 
-.task-status {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-weight: bold;
-    color: green;
+.taskConfig {
+    margin-top: 10px;
 }
 
 pre {
