@@ -27,18 +27,3 @@ def extract_audio(clip, output_audio_file_path):
     audio_clip.close()
 
 
-import whisper_timestamped as whisper
-
-def generate_captions(audio_file_path): 
-    audio = whisper.load_audio(audio_file_path)
-    model = whisper.load_model("medium.en", device="cpu")
-    result = whisper.transcribe(model, audio, language="en")
-    return result
-
-
-def generate_captions_file(audio_file_path, output_file):
-    audio = whisper.load_audio(audio_file_path)
-    model = whisper.load_model("medium.en", device="cpu")
-    result = whisper.transcribe(model, audio, language="en")
-    with open(output_file, 'w') as file:
-        json.dump(result, file)

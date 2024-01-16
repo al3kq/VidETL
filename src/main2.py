@@ -12,8 +12,8 @@ pipeline = VideoEditingPipeline(name="test")
 
 # Add tasks
 pipeline.add_task(RandomClipEditor(start_time=0.0, duration=15.0))
-pipeline.add_task(AspectRatioFormatter(aspect_ratio='4:9'))
-pipeline.add_task(CaptionAdder(editable=True, highlight_words=True))
+pipeline.add_task(AspectRatioFormatter(aspect_ratio='4:3'))
+pipeline.add_task(CaptionAdder(editable=False, highlight_words=True))
 
 directory = "../example_videos/example_samples"
 clip = execute_pipeline_from_dir(directory, pipeline)

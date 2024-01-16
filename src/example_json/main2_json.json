@@ -9,11 +9,11 @@
       },
       {
         "type": "AspectRatioFormatter",
-        "aspect_ratio": "4:9"
+        "aspect_ratio": "4:3"
       },
       {
         "type": "CaptionAdder",
-        "editable": true,
+        "editable": false,
         "highlight_words": true
       }
     ],
