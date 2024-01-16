@@ -1,4 +1,5 @@
 from moviepy.editor import AudioFileClip
+import json
 
 def add_audio(clip, audio_path):
     """
@@ -33,3 +34,11 @@ def generate_captions(audio_file_path):
     model = whisper.load_model("medium.en", device="cpu")
     result = whisper.transcribe(model, audio, language="en")
     return result
+
+
+def generate_captions_file(audio_file_path, output_file):
+    audio = whisper.load_audio(audio_file_path)
+    model = whisper.load_model("medium.en", device="cpu")
+    result = whisper.transcribe(model, audio, language="en")
+    with open(output_file, 'w') as file:
+        json.dump(result, file)

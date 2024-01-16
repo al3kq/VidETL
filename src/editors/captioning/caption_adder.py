@@ -1,8 +1,9 @@
 from moviepy.editor import CompositeVideoClip, ImageClip
 import time, os
-from utils.audio_utils import extract_audio, generate_captions
+from utils.audio_utils import extract_audio, generate_captions, generate_captions_file
 from utils.caption_utils import generate_highlighted_caption_image, generate_caption_image
 from ..base_editor import BaseEditor
+import json
 
 class CaptionAdder(BaseEditor):
     caption_font: str = 'Verdana'
@@ -16,14 +17,38 @@ class CaptionAdder(BaseEditor):
         # Assuming the add_captions method applies captions to the clip and returns the modified clip
         extract_audio(video_clip, audio_filename)
         caption_json = generate_captions(audio_filename)
-        print(caption_json)
         if os.path.exists(audio_filename):
             os.remove(audio_filename)
         return caption_json
+    
+    def get_caption_file(self, video_clip, output_file):
+        unique_id = int(time.time()) 
+        audio_filename = f"output_{unique_id}.wav"
+        # Assuming the add_captions method applies captions to the clip and returns the modified clip
+        extract_audio(video_clip, audio_filename)
+        generate_captions_file(audio_filename, output_file)
+        if os.path.exists(audio_filename):
+            os.remove(audio_filename)
 
     def apply(self, video_clip):
         clips = [video_clip]  # Start with the original clip
-        caption_json = self.get_caption_json(video_clip)
+        unique_id = int(time.time()) 
+        caption_output_file = f"output_captions_{unique_id}.json"
+        self.get_caption_file(video_clip, caption_output_file)
+
+        # Prompt User:
+        while True:
+            user_input = input("Are the captions ready? (y/Y/yes to proceed): ")
+            if user_input.lower() == 'y' or user_input.lower() == 'yes':
+                break
+
+        try:
+            with open(caption_output_file, 'r') as file:
+                caption_json = json.load(file)
+        except FileNotFoundError:
+            print(f"File not found: {caption_output_file}")
+
+        # caption_json = self.get_caption_json(video_clip)
         video_width, video_height = video_clip.size
 
         # Reference dimensions (e.g., 640x720)
