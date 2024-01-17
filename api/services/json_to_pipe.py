@@ -10,12 +10,13 @@ from src.io_files.video_writer import save_video_files
 # Function to create an editor instance based on the type and parameters
 def create_editor(editor_data):
     editor_type = editor_data['type']
+    config_data = editor_data.get('config', None)
     if editor_type == 'RandomClipEditor':
-        return RandomClipEditor(start_time=int(editor_data.get('start', 0)), duration=int(editor_data.get('end', 30)), silent=editor_data.get('silent', False))
+        return RandomClipEditor(start_time=int(config_data.get('start', 0)), duration=int(config_data.get('end', 30)), silent=config_data.get('silent', False))
     elif editor_type == 'AspectRatioFormatter':
-        return AspectRatioFormatter(aspect_ratio=editor_data['aspect_ratio'])
+        return AspectRatioFormatter(aspect_ratio=config_data['aspect_ratio'])
     elif editor_type == 'CaptionAdder':
-        return CaptionAdder(editable=editor_data['editable'], highlight_words=editor_data['highlight_words'])
+        return CaptionAdder(editable=config_data['editable'], highlight_words=config_data['highlight_words'])
     else:
         raise ValueError(f"Unknown editor type: {editor_type}")
 

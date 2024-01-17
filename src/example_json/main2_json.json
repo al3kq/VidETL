@@ -4,21 +4,26 @@
     "tasks": [
       {
         "type": "RandomClipEditor",
-        "start_time": 0.0,
-        "duration": 15.0
+        "config": {
+          "start_time": 0,
+          "duration": 10
+        }
       },
       {
         "type": "AspectRatioFormatter",
-        "aspect_ratio": "4:3"
+        "config": {
+          "aspect_ratio": "9:10"
+        }
       },
       {
         "type": "CaptionAdder",
-        "editable": false,
-        "highlight_words": true
+        "config": {
+          "editable": false,
+          "highlight_words": true
+        }
       }
     ],
     "directory": "example_videos/example_samples"
   },
   "output_directory": "output"
 }
-
