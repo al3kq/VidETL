@@ -1,7 +1,45 @@
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import FastAPI, Depends, APIRouter, HTTPException, Body
 import json
+from fastapi.security import OAuth2PasswordBearer
 import uuid
+from jose import JWTError, jwt
+import jwt
+from functools import wraps
+from typing import Optional
 from ..services.json_to_pipe import json_to_pipeline
+
+from fastapi import HTTPException, Request, status
+from functools import wraps
+
+SECRET_KEY = "your_secret_key"  # Replace with your actual key
+
+def token_validator(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        request = None
+        for arg in args:
+            if isinstance(arg, Request):
+                request = arg
+                break
+        if not request:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Request object not found")
+
+        token = request.headers.get("Authorization")
+        if not token or not token.startswith("Bearer "):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Token not found or invalid")
+
+        token = token.split(" ")[1]  # Get the token part from "Bearer <token>"
+        
+        # Simple token validation logic (you should replace this with actual validation)
+        if token != SECRET_KEY:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Invalid token")
+
+        return await func(*args, **kwargs)
+    return wrapper
+
 
 router = APIRouter()
 
@@ -15,6 +53,7 @@ async def read_root():
 # In routes/pipeline.py
 
 @router.post("/pipeline")
+@token_validator
 async def create_pipeline(pipeline_data: dict = Body(...)):
     pipeline_id = str(uuid.uuid4())
     try:
