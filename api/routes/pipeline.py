@@ -2,7 +2,6 @@ from fastapi import FastAPI, Depends, APIRouter, HTTPException, Body
 import json
 from fastapi.security import OAuth2PasswordBearer
 import uuid
-from jose import JWTError, jwt
 import jwt
 from functools import wraps
 from typing import Optional
@@ -11,17 +10,15 @@ from ..services.json_to_pipe import json_to_pipeline
 from fastapi import HTTPException, Request, status
 from functools import wraps
 
-SECRET_KEY = "your_secret_key"  # Replace with your actual key
+SECRET_KEY = "DEVJWTSECRET"  # Replace with your actual key
+
+ALGORITHM = "HS256"
 
 def token_validator(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):
-        request = None
-        for arg in args:
-            if isinstance(arg, Request):
-                request = arg
-                break
-        if not request:
+        request = kwargs.get('request')
+        if request is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Request object not found")
 
@@ -32,8 +29,10 @@ def token_validator(func):
 
         token = token.split(" ")[1]  # Get the token part from "Bearer <token>"
         
-        # Simple token validation logic (you should replace this with actual validation)
-        if token != SECRET_KEY:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            # Add additional validation here if necessary (e.g., check 'sub' field in payload)
+        except:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Invalid token")
 
@@ -52,9 +51,10 @@ async def read_root():
 
 # In routes/pipeline.py
 
+
 @router.post("/pipeline")
 @token_validator
-async def create_pipeline(pipeline_data: dict = Body(...)):
+async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
     pipeline_id = str(uuid.uuid4())
     try:
         # Extract the pipeline configuration and output directory
@@ -73,6 +73,7 @@ async def create_pipeline(pipeline_data: dict = Body(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
     return {"pipeline_id": pipeline_id, "message": "Pipeline processing completed"}
+
 
 
 @router.get("/pipeline/{pipeline_id}/status")
