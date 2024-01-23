@@ -3,7 +3,7 @@ print(jwt.__file__)
 
 jwt_secret = "DEVJWTSECRET"
 
-token_full = "Bearer "
+token_full = "Bearer ..-"
 
 token = token_full.split(' ')[1]
 

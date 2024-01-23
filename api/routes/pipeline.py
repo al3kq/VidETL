@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Depends, APIRouter, HTTPException, Body
+from fastapi import FastAPI, Depends, APIRouter, HTTPException, Body, File, UploadFile
 import json
 from fastapi.security import OAuth2PasswordBearer
 import uuid
+import time
 import jwt
 print(jwt.__file__)
 from functools import wraps
@@ -44,6 +45,7 @@ router = APIRouter()
 
 # Example in-memory storage for pipelines
 pipelines = {}
+file_paths = {}
 
 @router.get("/")
 async def read_root():
@@ -51,10 +53,9 @@ async def read_root():
 
 # In routes/pipeline.py
 
-
 @router.post("/pipeline")
 @token_validator
-async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
+async def create_pipeline(request: Request, pipeline_data: dict = Body(...), file_path: str = ""):
     pipeline_id = str(uuid.uuid4())
     pipeline_data = pipeline_data["body"]
     try:
@@ -63,6 +64,9 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
         print(pipeline_config)
         output_directory = pipeline_data.get("output_directory", "./output")
         print(output_directory)
+        if pipeline_config["directory"] == '' and file_paths["balls"] != "":
+            print("here")
+            pipeline_config["directory"] = file_paths.get("balls", "")
 
         # Process the pipeline
         json_to_pipeline(pipeline_config)
@@ -78,6 +82,19 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
 
     return {"pipeline_id": pipeline_id, "message": "Pipeline processing completed"}
 
+@router.post("/upload")
+@token_validator
+async def upload_file(request: Request, file: UploadFile = File(...)):
+    # Save the file to a directory
+    with open(f"example_videos/input_vids/{file.filename}", "wb") as buffer:
+        # Read the file in chunks and save it
+        for data in iter(lambda: file.file.read(10000), b""):
+            buffer.write(data)
+
+    unique_key = "balls"  # Generate or retrieve a unique key
+    file_paths[unique_key] = "example_videos/input_vids/"
+    print(file_paths)
+    return {"filename": file.filename}
 
 
 @router.get("/pipeline/{pipeline_id}/status")
