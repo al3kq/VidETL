@@ -1,6 +1,6 @@
-from utils.audio_utils import extract_audio
+from ....utils.audio_utils import extract_audio
 import os, time, json
-from utils.file_utils import gen_temp_file_name
+from ....utils.file_utils import gen_temp_file_name
 import whisper_timestamped as whisper
 
 def generate_captions(audio_file_path): 

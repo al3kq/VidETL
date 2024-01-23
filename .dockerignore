@@ -1,0 +1,4 @@
+output
+example_videos/*
+!example_videos/example_samples/
+frontend

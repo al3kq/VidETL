@@ -57,7 +57,6 @@ async def read_root():
 async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
     pipeline_id = str(uuid.uuid4())
     pipeline_data = pipeline_data["body"]
-    print(pipeline_data)
     try:
         # Extract the pipeline configuration and output directory
         pipeline_config = pipeline_data["pipeline"]

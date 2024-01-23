@@ -1,3 +1,0 @@
-editors
-pipeline
-utils
