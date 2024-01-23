@@ -1,8 +1,9 @@
 import jwt
+print(jwt.__file__)
 
 jwt_secret = "DEVJWTSECRET"
 
-token_full = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzA1NTQ1MzAzfQ.Q-nKnrK_AQ9fq5ZKt8InBHnkbZ2u79X1BQCeiNshyjc"
+token_full = "Bearer "
 
 token = token_full.split(' ')[1]
 

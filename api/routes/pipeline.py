@@ -3,6 +3,7 @@ import json
 from fastapi.security import OAuth2PasswordBearer
 import uuid
 import jwt
+print(jwt.__file__)
 from functools import wraps
 from typing import Optional
 from ..services.json_to_pipe import json_to_pipeline
@@ -26,13 +27,12 @@ def token_validator(func):
         if not token or not token.startswith("Bearer "):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Token not found or invalid")
-
-        token = token.split(" ")[1]  # Get the token part from "Bearer <token>"
-        
+        token = token[7:].strip('"')
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
             # Add additional validation here if necessary (e.g., check 'sub' field in payload)
-        except:
+        except Exception as e:
+            print(f"h3 - Exception: {str(e)}")
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Invalid token")
 
@@ -56,10 +56,14 @@ async def read_root():
 @token_validator
 async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
     pipeline_id = str(uuid.uuid4())
+    pipeline_data = pipeline_data["body"]
+    print(pipeline_data)
     try:
         # Extract the pipeline configuration and output directory
         pipeline_config = pipeline_data["pipeline"]
+        print(pipeline_config)
         output_directory = pipeline_data.get("output_directory", "./output")
+        print(output_directory)
 
         # Process the pipeline
         json_to_pipeline(pipeline_config)
@@ -70,6 +74,7 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...)):
             "output_directory": output_directory
         }
     except Exception as e:
+        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
     return {"pipeline_id": pipeline_id, "message": "Pipeline processing completed"}
