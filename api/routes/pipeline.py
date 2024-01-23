@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Depends, APIRouter, HTTPException, Body, File, UploadFile
 import json
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import FileResponse
 import uuid
-import time
+import time, os
 import jwt
 print(jwt.__file__)
 from functools import wraps
@@ -96,6 +97,19 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     print(file_paths)
     return {"filename": file.filename}
 
+@router.get("/download")
+async def download_file():
+    file_path = "output/test_output_filename.mp4"  # Path to your MP4 file
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    return FileResponse(
+        path=file_path, 
+        media_type='video/mp4', 
+        filename="downloaded_file.mp4",
+        headers={"Content-Disposition": "attachment; filename=downloaded_file.mp4"}
+    )
 
 @router.get("/pipeline/{pipeline_id}/status")
 async def get_pipeline_status(pipeline_id: str):

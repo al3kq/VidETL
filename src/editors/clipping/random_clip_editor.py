@@ -11,6 +11,7 @@ class RandomClipEditor(BaseEditor):
         Extracts a random clip from the video.
         """
         if self.silent:
+            print("silent")
             video_clip = video_clip.without_audio()
         # Calculate the latest possible start time for the clip
         max_clip_start_time = video_clip.duration - self.duration
