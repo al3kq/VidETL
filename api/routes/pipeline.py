@@ -10,6 +10,16 @@ from functools import wraps
 from typing import Optional
 from ..services.json_to_pipe import json_to_pipeline
 
+
+class uiInput:
+    def __init__(self, id, input_video_path, status, data) -> None:
+        self.id
+        self.input_video_path
+        self.status
+        self.data
+    
+
+
 from fastapi import HTTPException, Request, status
 from functools import wraps
 
@@ -39,6 +49,7 @@ def token_validator(func):
                                 detail="Invalid token")
 
         return await func(*args, **kwargs)
+    print(wrapper)
     return wrapper
 
 
@@ -62,11 +73,8 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...), fil
     try:
         # Extract the pipeline configuration and output directory
         pipeline_config = pipeline_data["pipeline"]
-        print(pipeline_config)
         output_directory = pipeline_data.get("output_directory", "./output")
-        print(output_directory)
         if pipeline_config["directory"] == '' and file_paths["balls"] != "":
-            print("here")
             pipeline_config["directory"] = file_paths.get("balls", "")
 
         # Process the pipeline
@@ -83,6 +91,7 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...), fil
 
     return {"pipeline_id": pipeline_id, "message": "Pipeline processing completed"}
 
+
 @router.post("/upload")
 @token_validator
 async def upload_file(request: Request, file: UploadFile = File(...)):
@@ -96,6 +105,7 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     file_paths[unique_key] = "example_videos/input_vids/"
     print(file_paths)
     return {"filename": file.filename}
+
 
 @router.get("/download")
 async def download_file():
@@ -111,6 +121,7 @@ async def download_file():
         headers={"Content-Disposition": "attachment; filename=downloaded_file.mp4"}
     )
 
+
 @router.get("/pipeline/{pipeline_id}/status")
 async def get_pipeline_status(pipeline_id: str):
     pipeline = pipelines.get(pipeline_id)
@@ -118,15 +129,18 @@ async def get_pipeline_status(pipeline_id: str):
         raise HTTPException(status_code=404, detail="Pipeline not found")
     return {"pipeline_id": pipeline_id, "status": "Processing"}  # Example status
 
+
 @router.get("/pipeline/{pipeline_id}/captions")
 async def get_captions(pipeline_id: str):
     # Implement logic to fetch generated captions
     pass
 
+
 @router.post("/pipeline/{pipeline_id}/captions")
 async def submit_captions(pipeline_id: str, edited_captions: dict = Body(...)):
     # Implement logic to update the pipeline with edited captions
     pass
+
 
 @router.get("/pipeline/{pipeline_id}/output")
 async def get_output(pipeline_id: str):
