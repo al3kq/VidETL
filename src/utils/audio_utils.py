@@ -22,6 +22,7 @@ def extract_audio(clip, output_audio_file_path):
     :param video_file_path: str, path to the video file
     :param output_audio_file_path: str, path where the extracted audio file will be saved
     """
+    print("write audio")
     audio_clip = clip.audio
     audio_clip.write_audiofile(output_audio_file_path)
     audio_clip.close()

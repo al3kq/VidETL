@@ -9,3 +9,5 @@ example_videos/
 .DS_Store
 __pycache__
 temp/
+test_env/
+fonts

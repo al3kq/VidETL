@@ -1,4 +1,5 @@
 output
 example_videos/*
-!example_videos/example_samples/
+!example_videos/input_vids/
 frontend
+test_env

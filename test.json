@@ -1,0 +1,28 @@
+{
+    "pipeline": {
+      "name": "test",
+      "tasks": [
+        {
+          "type": "RandomClipEditor",
+          "config": {
+            "start_time": 1,
+            "duration": 30
+          }
+        },
+        {
+          "type": "AspectRatioFormatter",
+          "config": {
+            "aspect_ratio": "9:10"
+          }
+        },
+        {
+          "type": "CaptionAdder",
+          "config": {
+            "highlight_words": true
+          }
+        }
+      ],
+      "directory": ""
+    },
+    "output_directory": "output"
+  }
