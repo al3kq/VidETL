@@ -5,7 +5,6 @@ from fastapi.responses import FileResponse
 import uuid
 import time, os
 import jwt
-print(jwt.__file__)
 from functools import wraps
 from typing import Optional
 from ..services.json_to_pipe import json_to_pipeline
