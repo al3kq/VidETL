@@ -10,8 +10,8 @@ COPY requirements2.txt ./
 RUN pip install --no-cache-dir -r requirements2.txt
 
 
-RUN apt-get -y update
-RUN apt-get -y upgrade
+RUN apt-get -y update && \
+RUN apt-get -y upgrade && \
 RUN apt-get install -y ffmpeg
 
 # Copy the current directory contents into the container at /usr/src/app

@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v2
       - name: List files
@@ -20,12 +23,29 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/al3kq/pvidetl:latest .
-      - name: Push the iamge
-        run: docker push ghcr.io/al3kq/pvidetl:latest
+      - name: Cache pip packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements2.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/*.py') }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/al3kq/pvidetl:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
   deploy:
     runs-on: ubuntu-latest
@@ -40,4 +60,5 @@ jobs:
           script: |
             docker pull ghcr.io/al3kq/pvidetl:latest
             docker stop my-app || true
-            docker run -d --name videtl ghcr.io/al3kq/pvidetl:latest
+            docker rm my-app || true
+            docker run -d --name my-app ghcr.io/al3kq/pvidetl:latest
