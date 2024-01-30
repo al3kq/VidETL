@@ -38,8 +38,6 @@ class CaptionAdder(BaseEditor):
         # Adjust font size based on the scaling factor
         adjusted_fontsize = int(self.caption_fontsize * scale_factor)
 
-        print("adding captions")
-
         for segment in caption_json['segments']:
             words_in_segment = segment['words']
             # Split the segment into chunks of 3 words

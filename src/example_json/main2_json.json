@@ -23,7 +23,8 @@
         }
       }
     ],
-    "directory": "example_videos/example_samples"
-  },
-  "output_directory": "output"
+    "directory": "example_videos/example_samples",
+    "output_directory": "output",
+    "status": "null"
+  }
 }

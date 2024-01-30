@@ -7,63 +7,12 @@ import time, os
 import jwt
 from functools import wraps
 from typing import Optional
-from ..services.json_to_pipe import json_to_pipeline
-
-
-class uiInput:
-    def __init__(self, id, input_video_path, status, data) -> None:
-        self.id
-        self.input_video_path
-        self.status
-        self.data
-    
-
+from ..services.auth.auth import token_validator
+from ..services.preprocessing.preprocessing import parse_pipeline_data, json_to_pipeline
+from ..services.processing.execute import execute_pipeline
 
 from fastapi import HTTPException, Request, status
 from functools import wraps
-
-SECRET_KEY = "DEVJWTSECRET"  # Replace with your actual key
-
-ALGORITHM = "HS256"
-
-# def token_validator(func):
-#     @wraps(func)
-#     async def wrapper(*args, **kwargs):
-#         request = kwargs.get('request')
-#         if request is None:
-#             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-#                                 detail="Request object not found")
-
-#         token = request.headers.get("Authorization")
-#         if not token or not token.startswith("Bearer "):
-#             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-#                                 detail="Token not found or invalid")
-#         token = token[7:].strip('"')
-#         try:
-#             payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-#             # Add additional validation here if necessary (e.g., check 'sub' field in payload)
-#         except Exception as e:
-#             print(f"h3 - Exception: {str(e)}")
-#             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-#                                 detail="Invalid token")
-#         kwargs['payload'] = payload
-#         return await func(*args, **kwargs)
-#     print(wrapper)
-#     return wrapper
-
-def token_validator(request: Request):
-    token = request.headers.get("Authorization")
-    if not token or not token.startswith("Bearer "):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Token not found or invalid")
-    token = token[7:].strip('"')
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Invalid token")
-    print(payload)
-    return payload
 
 router = APIRouter()
 
@@ -86,24 +35,23 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...), pay
     if user_id is None:
         raise HTTPException(status_code=400, detail="User ID not found in payload")
     
+    input_directory = ""
+    # try:
+    if user_id in file_paths and file_paths[user_id] != "":
+        input_directory = file_paths[user_id]
+    else:
+        input_directory = f"example_videos/input_vids/{user_id}"
+    # except:
+    #     raise HTTPException(status_code=400, detail="User input folder not found")
+    
+    output_directory = f"output/{user_id}"
+    os.makedirs(output_directory, exist_ok=True)
+    # os.remove(output_directory)
+
     pipeline_id = str(uuid.uuid4())
-    pipeline_data = pipeline_data["body"]
     try:
-        print(pipeline_data)
-        print(file_paths)
-        # Extract the pipeline configuration and output directory
-        pipeline_config = pipeline_data["pipeline"]
-        output_directory = pipeline_data.get("output_directory", "./output")
-        if pipeline_config["directory"] == '' and file_paths[user_id] != "":
-            pipeline_config["directory"] = file_paths.get(user_id, "")
-
-        print(pipeline_config["directory"])
-
-        # Process the pipeline
-        json_to_pipeline(pipeline_config)
-        print("here")
-
-        # Store the pipeline information (simplified for example)
+        pipeline = json_to_pipeline(pipeline_data["body"])
+        execute_pipeline(input_directory, output_directory, pipeline)
         pipelines[pipeline_id] = {
             "status": "created",
             "output_directory": output_directory
@@ -111,8 +59,7 @@ async def create_pipeline(request: Request, pipeline_data: dict = Body(...), pay
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-    return {"pipeline_id": pipeline_id, "message": "Pipeline processing completed"}
+    return {"pipeline_id": pipeline_id, "message": "Pipeline Created"}
 
 
 @router.post("/upload")
@@ -138,7 +85,6 @@ async def upload_file(request: Request, file: UploadFile = File(...), payload: d
 
     unique_key = user_id  # Generate or retrieve a unique key
     file_paths[unique_key] = user_dir
-    print(file_paths)
     return {"filename": file.filename}
 
 
@@ -158,11 +104,12 @@ async def download_file():
 
 
 @router.get("/pipeline/{pipeline_id}/status")
-async def get_pipeline_status(pipeline_id: str):
+def get_pipeline_status(pipeline_id: str):
+    pipeline_get = execute_pipeline(pipeline_id)
     pipeline = pipelines.get(pipeline_id)
     if not pipeline:
         raise HTTPException(status_code=404, detail="Pipeline not found")
-    return {"pipeline_id": pipeline_id, "status": "Processing"}  # Example status
+    return {"pipeline_id": pipeline_id, "status": pipelines[pipeline_get]}  # Example status
 
 
 @router.get("/pipeline/{pipeline_id}/captions")

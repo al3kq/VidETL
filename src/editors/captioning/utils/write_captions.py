@@ -5,11 +5,11 @@ import whisper_timestamped as whisper
 
 def generate_captions(audio_file_path):
     try:
-        print("start")
+        start_time = time.time()
         audio = whisper.load_audio(audio_file_path)
-        model = whisper.load_model("medium.en", device="cpu")
+        model = whisper.load_model("small.en", device="cpu")
         result = whisper.transcribe(model, audio, language="en")
-        print("gen caps")
+        print(f"gen caps time: {time.time() - start_time}")
         return result
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -18,15 +18,16 @@ def generate_captions(audio_file_path):
 
 def generate_captions_file(audio_file_path, output_file):
     print("her3eee")
+    start_time = time.time()
     audio = whisper.load_audio(audio_file_path)
     model = whisper.load_model("medium.en", device="cpu")
     result = whisper.transcribe(model, audio, language="en")
     with open(output_file, 'w') as file:
         json.dump(result, file)
+    print(f"gen caps file time: {time.time() - start_time}")
 
 def get_caption_json(video_clip):
     audio_filename = gen_temp_file_name("temp", "wav")
-    print("her1eee")
     # Assuming the add_captions method applies captions to the clip and returns the modified clip
     extract_audio(video_clip, audio_filename)
     caption_json = generate_captions(audio_filename)
@@ -36,7 +37,6 @@ def get_caption_json(video_clip):
 
 def get_caption_file(video_clip, output_file):
     audio_filename = gen_temp_file_name("temp", "wav")
-    print("hereee")
     # Assuming the add_captions method applies captions to the clip and returns the modified clip
     extract_audio(video_clip, audio_filename)
     generate_captions_file(audio_filename, output_file)
