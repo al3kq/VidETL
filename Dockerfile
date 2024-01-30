@@ -5,7 +5,7 @@ FROM python:3.9
 WORKDIR /usr/src/app
 
 RUN apt-get -y update && \
-    apt-get install -y ffmpeg \
+    apt-get install -y ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 

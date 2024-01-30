@@ -3,3 +3,4 @@ example_videos/*
 !example_videos/input_vids/
 frontend
 test_env
+.git
