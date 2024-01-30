@@ -58,6 +58,7 @@ jobs:
           username: ${{ secrets.DO_USER }}
           password: ${{ secrets.DO_PASSWORD }}
           script: |
+            docker login ghct.io -u al3kq --password ${{ secrets.GITHUB_TOKEN }}
             docker pull ghcr.io/al3kq/pvidetl:latest
             docker stop pvidetl || true
             docker rm pvidetl || true
