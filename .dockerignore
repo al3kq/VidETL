@@ -4,3 +4,12 @@ example_videos/*
 frontend
 test_env
 .git
+.DS_Store
+__pycache__
+test_env/
+*.mp4
+*.mp3
+*.wav
+*.png
+video_env/
+output/
