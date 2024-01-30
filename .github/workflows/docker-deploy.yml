@@ -62,4 +62,4 @@ jobs:
             docker pull ghcr.io/al3kq/pvidetl:latest
             docker stop pvidetl || true
             docker rm pvidetl || true
-            docker run -d --name pvidetl ghcr.io/al3kq/pvidetl:latest
+            docker run -d -p 8000:8000 --name pvidetl ghcr.io/al3kq/pvidetl:latest
