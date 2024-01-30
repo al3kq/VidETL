@@ -20,12 +20,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ghcr.io/al3kq/pvidetl:latest
+        run: docker build -t ghcr.io/al3kq/pvidetl:latest
+      - name: Push the iamge
+        run: docker push ghcr.io/al3kq/pvidetl:latest
 
   deploy:
     runs-on: ubuntu-latest
