@@ -4,15 +4,15 @@ FROM python:3.9
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-COPY requirements2.txt ./
-
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements2.txt
-
-
 RUN apt-get -y update && \
-    apt-get -y upgrade && \
-    apt-get install -y ffmpeg
+    apt-get install -y ffmpeg \
+    rm -rf /var/lib/apt/lists/*
+
+
+COPY requirements2.txt ./
+# Install any needed packages specified in requirements.txt
+RUN pip install -r requirements2.txt
+
 
 # Copy the current directory contents into the container at /usr/src/app
 COPY . /usr/src/app
