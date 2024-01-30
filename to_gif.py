@@ -14,5 +14,6 @@ def convert_directory_mp4s_to_gifs(directory):
             convert_mp4_to_gif(input_file, output_file)
             print(f"Converted {input_file} to {output_file}")
 
+
 # Example usage
 convert_directory_mp4s_to_gifs("output")
