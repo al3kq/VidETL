@@ -1,1 +1,1 @@
-hypercorn api.main:app --reload --bind 0.0.0.0:8000
+hypercorn api.main:app --reload --bind 0.0.0.0:8800
