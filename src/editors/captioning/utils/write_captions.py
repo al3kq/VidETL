@@ -1,6 +1,6 @@
-from ....utils.audio_utils import extract_audio
+from utils.audio_utils import extract_audio
 import os, time, json
-from ....utils.file_utils import gen_temp_file_name
+from utils.file_utils import gen_temp_file_name
 import whisper_timestamped as whisper
 
 def generate_captions(audio_file_path):
@@ -48,10 +48,12 @@ def get_low_confidence_words(caption_data, conf_thres):
     low_conf = ""
     for segments in caption_data["segments"]:
         for word_data in segments["words"]:
+            word_data["low_confidence"] = False
             if word_data["confidence"] < conf_thres:
                 word = word_data["text"]
                 conf = word_data["confidence"]
                 low_conf += f" {word}->{conf}"
+                word_data["low_confidence"] = True
 
     return low_conf
 
@@ -65,6 +67,8 @@ def get_editable_caption_json(video_clip):
             caption_json = json.load(file)
             low_confidence = get_low_confidence_words(caption_json, 0.8)
             if len(low_confidence) > 0:
+                print(caption_json)
+                print("low: ")
                 print(low_confidence)
 
     except FileNotFoundError:
@@ -75,6 +79,7 @@ def get_editable_caption_json(video_clip):
         user_input = input("Are the captions ready? (y/Y/yes to proceed): ")
         if user_input.lower() == 'y' or user_input.lower() == 'yes':
             break
+
 
     try:
         with open(caption_output_file, 'r') as file:

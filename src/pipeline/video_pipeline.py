@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import List
-from ..editors.base_editor import BaseEditor
+from editors.base_editor import BaseEditor
 import time
 
 class VideoEditingPipeline(BaseModel):

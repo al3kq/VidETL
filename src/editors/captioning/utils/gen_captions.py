@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
 def generate_highlighted_caption_image(text, highlighted_word, highlighted_word_index, temp_output,
-                                       text_padding=10, font_path="/usr/src/app/fonts/Arial Rounded Bold.ttf", font_size=36):
+                                       text_padding=10, font_path="fonts/Arial Rounded Bold.ttf", font_size=36):
     try:
         # Load the font
         font = ImageFont.truetype(font_path, font_size)
