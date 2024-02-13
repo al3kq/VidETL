@@ -7,7 +7,7 @@ def generate_captions(audio_file_path):
     try:
         start_time = time.time()
         audio = whisper.load_audio(audio_file_path)
-        model = whisper.load_model("small.en", device="cpu")
+        model = whisper.load_model("medium.en", device="cpu")
         result = whisper.transcribe(model, audio, language="en")
         print(f"gen caps time: {time.time() - start_time}")
         return result
@@ -52,7 +52,7 @@ def get_low_confidence_words(caption_data, conf_thres):
             if word_data["confidence"] < conf_thres:
                 word = word_data["text"]
                 conf = word_data["confidence"]
-                low_conf += f" {word}->{conf}"
+                low_conf += f"{word}->{conf}"
                 word_data["low_confidence"] = True
 
     return low_conf
